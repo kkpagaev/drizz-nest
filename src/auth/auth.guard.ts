@@ -9,6 +9,7 @@ import { Request } from "express";
 import { UsersService } from "../users/users.service";
 import { Reflector } from "@nestjs/core";
 import { MetadataKey } from "../medata";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,6 +17,7 @@ export class AuthGuard implements CanActivate {
     private jwtService: JwtService,
     private userService: UsersService,
     private reflector: Reflector,
+    private configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -36,8 +38,9 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: process.env.ACCESS_TOKEN_SECRET,
+        secret: this.configService.get<string>("JWT_SECRET") || "secret",
       });
+
       const user = await this.userService.findOne(payload.userId);
 
       request["user"] = user;
