@@ -1,11 +1,11 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-const CreateUserSchema = z.object({
+export const CreateUserSchema = z.object({
   fullName: z.string(),
   phone: z.string(),
   username: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
 });
 
