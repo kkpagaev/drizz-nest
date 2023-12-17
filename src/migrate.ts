@@ -1,14 +1,14 @@
-import { createDrizzle } from './db';
-import { migrate } from 'drizzle-orm/node-postgres/migrator';
+import { createDrizzle } from "./db";
+import { migrate } from "drizzle-orm/node-postgres/migrator";
 
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 async function run_migration() {
   const { db, client } = createDrizzle();
   await client.connect();
 
-  await migrate(db, { migrationsFolder: './drizzle/migrations' });
+  await migrate(db, { migrationsFolder: "./drizzle/migrations" });
 
   await client.end();
 }

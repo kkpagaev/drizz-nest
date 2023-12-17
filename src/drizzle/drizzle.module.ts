@@ -1,10 +1,10 @@
-import { Inject, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as schema from '../schema';
-import { PgRemoteDatabase } from 'drizzle-orm/pg-proxy';
-import { createDrizzle } from '../db';
+import { Inject, Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import * as schema from "../schema";
+import { PgRemoteDatabase } from "drizzle-orm/pg-proxy";
+import { createDrizzle } from "../db";
 
-export const InjectDrizzle = () => Inject('DRIZZLE_CONNECTION');
+export const InjectDrizzle = () => Inject("DRIZZLE_CONNECTION");
 
 export type Drizzle = PgRemoteDatabase<typeof schema>;
 
@@ -12,11 +12,11 @@ export type Drizzle = PgRemoteDatabase<typeof schema>;
   imports: [ConfigModule.forRoot()],
   providers: [
     {
-      provide: 'DRIZZLE_CONNECTION',
+      provide: "DRIZZLE_CONNECTION",
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => {
         const { client, db } = createDrizzle(
-          config.get('DB_URL') || 'postgres://user:user@localhost:7778/user',
+          config.get("DB_URL") || "postgres://user:user@localhost:7778/user",
         );
         await client.connect();
 
@@ -24,6 +24,6 @@ export type Drizzle = PgRemoteDatabase<typeof schema>;
       },
     },
   ],
-  exports: ['DRIZZLE_CONNECTION'],
+  exports: ["DRIZZLE_CONNECTION"],
 })
 export class DrizzleModule {}

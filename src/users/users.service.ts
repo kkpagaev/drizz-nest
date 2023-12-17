@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { Drizzle, InjectDrizzle } from '../drizzle/drizzle.module';
-import { eq } from 'drizzle-orm';
-import { users } from '../schema';
-import { hash } from 'bcrypt';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { Drizzle, InjectDrizzle } from "../drizzle/drizzle.module";
+import { eq } from "drizzle-orm";
+import { users } from "../schema";
+import { hash } from "bcrypt";
 
 @Injectable()
 export class UsersService {
@@ -57,7 +57,15 @@ export class UsersService {
     return user;
   }
 
-  async remove(id: number) {
+  remove(id: number) {
     return this.db.delete(users).where(eq(users.id, id));
+  }
+
+  async findUsername(username: string) {
+    const user = await this.db.query.users.findFirst({
+      where: eq(users.username, username),
+    });
+
+    return user;
   }
 }
