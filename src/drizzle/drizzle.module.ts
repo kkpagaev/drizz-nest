@@ -1,7 +1,5 @@
 import { Inject, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { Client } from 'pg';
 import * as schema from '../schema';
 import { PgRemoteDatabase } from 'drizzle-orm/pg-proxy';
 import { createDrizzle } from '../db';
